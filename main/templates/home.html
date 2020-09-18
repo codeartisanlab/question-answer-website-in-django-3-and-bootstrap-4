@@ -40,59 +40,49 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-md-8 offset-2">
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-lg" placeholder="Search" />
-                    <div class="input-group-append">
-                      <button class="btn btn-dark btn-lg" type="button" id="button-addon2">Search</button>
+                <form>
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
+                        <div class="input-group-append">
+                        <button class="btn btn-dark btn-lg" type="submit" id="button-addon2">Search</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
     <!-- Question List -->
     <div class="container">
+        {% for quest in quests %}
         <div class="card mb-3">
             <div class="card-body">
-                <h4 class="card-title">Question</h4>
-                <p class="card-text">Question Detail</p>
+                <h4 class="card-title"><a href="/detail/{{quest.id}}">{{quest.title}}</a></h4>
+                <p class="card-text">{{quest.detail}}</p>
                 <p>
-                    <a href="#" class="mr-2">John</a>
+                    <a href="#" class="mr-2">{{quest.user.username}}</a>
                     <a href="#" class="mr-2">5 Answers</a>
                     <a href="#" class="mr-2">10 Comments</a>
                 </p>
             </div>
         </div>
-        <div class="card mb-3">
-            <div class="card-body">
-                <h4 class="card-title">Question</h4>
-                <p class="card-text">Question Detail</p>
-                <p>
-                    <a href="#" class="mr-2">John</a>
-                    <a href="#" class="mr-2">5 Answers</a>
-                    <a href="#" class="mr-2">10 Comments</a>
-                </p>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-body">
-                <h4 class="card-title">Question</h4>
-                <p class="card-text">Question Detail</p>
-                <p>
-                    <a href="#" class="mr-2">John</a>
-                    <a href="#" class="mr-2">5 Answers</a>
-                    <a href="#" class="mr-2">10 Comments</a>
-                </p>
-            </div>
-        </div>
+        {% endfor %}
     </div>
     <!-- Pagination -->
     <nav class="my-3 container">
         <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            {% if quests.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{quests.previous_page_number}}">Previous</a></li>
+          {% endif %}
+          {% for i in quests.paginator.page_range %}
+          {% if quests.number == i %}
+          <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if quests.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{quests.next_page_number}}">Next</a></li>
+          {% endif %}
         </ul>
       </nav>
 </body>
