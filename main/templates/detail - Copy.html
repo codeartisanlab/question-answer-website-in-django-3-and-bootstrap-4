@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Page</title>
-    <!-- Animate 4 -->
+    <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="{% static 'animate.min.css' %}" />
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" />
@@ -103,55 +103,58 @@
                     </div>
                     {% endfor %}
                 </div>
-                {% if user.is_authenticated %}
+                
                 <!-- Comment Form -->
                 <div class="card my-3">
                     <h6 class="card-header">Add Comment</h6>
                     <div class="card-body">
+                        {% if user.is_authenticated %}
                         <textarea class="form-control comment-text"></textarea>
-                        <button type="button" data-answer="{{answer.id}}" class="btn btn-dark my-3 save-comment">Submit</button>
+                        <button data-answer="{{answer.id}}" class="btn btn-dark my-2 save-comment" type="button">Submit</button>
+                        {% else %}
+                        <p class="card-text"><a href="#">Login to comment</a></p>
+                        {% endif %}
                     </div>
                 </div>
-                {% endif %}
             </div>
         </div>
         <hr/>
         {% endfor %}
     </div>
+<!-- Load Jquery -->
 <script src="{% static 'jquery-3.5.1.min.js' %}"></script>
 <script>
     $(document).ready(function(){
         $(".save-comment").on('click',function(){
-            var _comment=$(".comment-text").val();
-            var _answerid=$(this).data('answer');
-            // Ajax
+            var _commentText=$(".comment-text").val();
+            var _answerId=$(this).data('answer');
+            // console.log(_answerId,_commentText);
+            // return false;
+            // Run Ajax
             $.ajax({
                 url:"/save-comment",
-                type:"post",
-                data:{
-                    comment:_comment,
-                    answerid:_answerid,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
+                type:'post',
                 dataType:'json',
+                data:{
+                   comment:_commentText,
+                   answerId:_answerId,
+                   csrfmiddlewaretoken:"{{csrf_token}}"
+                },
                 beforeSend:function(){
                     $(".save-comment").addClass('disabled').text('saving...');
                 },
                 success:function(res){
-                    if(res.bool==true){
-                        $(".comment-text").val('');
-                        // Append Element
-                        var _html='<div class="card mb-2 animate__animated animate__bounce">\
-                        <div class="card-body">\
-                            <p>'+_comment+'</p>\
-                            <p>\
-                                <a href="#">{{request.user}}</a>\
-                            </p>\
-                        </div>\
-                    </div>';
-                    $(".comment-wrapper").append(_html);
-                    }
-                    $(".save-comment").removeClass('disabled').text('Submit');
+                    var _html='';
+                    _html+='<div class="card mb-2 animate__animated animate__bounce">\
+                    <div class="card-body">\
+                        <p>'+_commentText+'</p>\
+                        <p>\
+                            <a href="#">{{request.user}}</a>\
+                        </p>\
+                    </div>\
+                </div>';
+                $(".comment-wrapper").append(_html);
+                $(".save-comment").removeClass('disabled').text('Submit');
                 }
             });
         });

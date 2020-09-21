@@ -22,20 +22,22 @@ def detail(request,id):
     return render(request,'detail.html',{
         'quest':quest,
         'tags':tags,
-        'answers':answers,
+        'answers':answers
     })
 
 # Save Comment
 def save_comment(request):
     if request.method=='POST':
         comment=request.POST['comment']
-        answerid=request.POST['answerid']
+        answerid=request.POST['answerId']
         answer=Answer.objects.get(pk=answerid)
         user=request.user
         Comment.objects.create(
             answer=answer,
-            comment=comment,
-            user=user
+            user=user,
+            comment=comment
         )
-        return JsonResponse({'bool':True})
+        return JsonResponse({
+            'bool':True
+        })
         

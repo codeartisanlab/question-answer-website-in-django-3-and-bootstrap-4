@@ -18,24 +18,12 @@ def home(request):
 def detail(request,id):
     quest=Question.objects.get(pk=id)
     tags=quest.tags.split(',')
-    answers=Answer.objects.filter(question=quest)
+    answer=Answer.objects.get(question=quest)
+    comments=Comment.objects.filter(answer=answer)
     return render(request,'detail.html',{
         'quest':quest,
         'tags':tags,
-        'answers':answers,
+        'answer':answer,
+        'comments':comments
     })
-
-# Save Comment
-def save_comment(request):
-    if request.method=='POST':
-        comment=request.POST['comment']
-        answerid=request.POST['answerid']
-        answer=Answer.objects.get(pk=answerid)
-        user=request.user
-        Comment.objects.create(
-            answer=answer,
-            comment=comment,
-            user=user
-        )
-        return JsonResponse({'bool':True})
         
