@@ -80,7 +80,7 @@
                 </p>
                 <p>
                     <a href="#" class="mr-3">{{answer.user.username}}</a>
-                    <span class="mr-3">5 comments</span>
+                    <span class="mr-3">{{answer.comment_set.count}} comments</span>
                     <span>{{answer.add_time|date:'d/m/Y h:i:s'}}</span>
                 </p>
                 <p>
@@ -117,6 +117,24 @@
         </div>
         <hr/>
         {% endfor %}
+
+        {% if user.is_authenticated %}
+        {% for msg in messages %}
+            <p class="text-success">{{msg}}</p>
+        {% endfor %}
+        <form method="post">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                {{answerform.as_table}}
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" class="btn btn-dark" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        {% endif %}
+
     </div>
 <script src="{% static 'jquery-3.5.1.min.js' %}"></script>
 <script>

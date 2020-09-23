@@ -2,6 +2,8 @@ from django.shortcuts import render,HttpResponse
 from django.http import JsonResponse
 from .models import Question,Answer,Comment
 from django.core.paginator import Paginator
+from django.contrib import messages
+from .forms import AnswerForm
 # Home Page
 def home(request):
     if 'q' in request.GET:
@@ -19,10 +21,20 @@ def detail(request,id):
     quest=Question.objects.get(pk=id)
     tags=quest.tags.split(',')
     answers=Answer.objects.filter(question=quest)
+    answerform=AnswerForm
+    if request.method=='POST':
+        answerData=AnswerForm(request.POST)
+        if answerData.is_valid():
+            answer=answerData.save(commit=False)
+            answer.question=quest
+            answer.user=request.user
+            answer.save()
+            messages.success(request,'Answer has been submitted.')
     return render(request,'detail.html',{
         'quest':quest,
         'tags':tags,
         'answers':answers,
+        'answerform':answerform
     })
 
 # Save Comment
