@@ -80,7 +80,7 @@
                 </p>
                 <p>
                     <a href="#" class="mr-3">{{answer.user.username}}</a>
-                    <span class="mr-3">{{answer.comment_set.count}} comments</span>
+                    <span class="mr-3"><span class="comment-count-{{answer.id}}">{{answer.comment_set.count}}</span> comments</span>
                     <span>{{answer.add_time|date:'d/m/Y h:i:s'}}</span>
                 </p>
                 <p>
@@ -91,7 +91,7 @@
                 </p>
                 <!-- Comment Section Start -->
                 <h3 class="my-4">Comment</h3>
-                <div class="comment-wrapper">
+                <div class="comment-wrapper-{{answer.id}}">
                     {% for comment in answer.comment_set.all %}
                     <div class="card mb-2">
                         <div class="card-body">
@@ -108,7 +108,7 @@
                 <div class="card my-3">
                     <h6 class="card-header">Add Comment</h6>
                     <div class="card-body">
-                        <textarea class="form-control comment-text"></textarea>
+                        <textarea class="form-control comment-text-{{answer.id}}"></textarea>
                         <button type="button" data-answer="{{answer.id}}" class="btn btn-dark my-3 save-comment">Submit</button>
                     </div>
                 </div>
@@ -140,8 +140,8 @@
 <script>
     $(document).ready(function(){
         $(".save-comment").on('click',function(){
-            var _comment=$(".comment-text").val();
             var _answerid=$(this).data('answer');
+            var _comment=$(".comment-text-"+_answerid).val();
             // Ajax
             $.ajax({
                 url:"/save-comment",
@@ -157,7 +157,7 @@
                 },
                 success:function(res){
                     if(res.bool==true){
-                        $(".comment-text").val('');
+                        $(".comment-text-"+_answerid).val('');
                         // Append Element
                         var _html='<div class="card mb-2 animate__animated animate__bounce">\
                         <div class="card-body">\
@@ -167,7 +167,9 @@
                             </p>\
                         </div>\
                     </div>';
-                    $(".comment-wrapper").append(_html);
+                    $(".comment-wrapper-"+_answerid).append(_html);
+                    var prevCount=$(".comment-count-"+_answerid).text();
+                    $(".comment-count-"+_answerid).text(parseInt(prevCount)+1);
                     }
                     $(".save-comment").removeClass('disabled').text('Submit');
                 }
