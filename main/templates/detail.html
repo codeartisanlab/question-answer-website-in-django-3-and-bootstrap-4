@@ -54,6 +54,12 @@
         <h2 class="my-4">{{quest.title}}</h2>
         <p>{{quest.detail}}</p>
         <p>
+            tags:
+            {% for tag in tags %}
+            <a href="#" class="badge badge-secondary p-1">{{tag}}</a>
+            {% endfor %}
+        </p>
+        <p>
             <span class="mr-4">{{quest.add_time|date:'d/m/Y'}}</span>
             <a href="#">{{quest.user.username}}</a>
         </p>
@@ -62,16 +68,16 @@
         <div class="row">
             <div class="col-1">
                 <div class="upvote">
-                    <strong>123</strong><br/>
+                    <strong class="upvote-count-{{answer.id}}">{{answer.upvote_set.count}}</strong><br/>
                     <span class="text-success">
-                        <i class="fa fa-arrow-up fa-2x"></i>
+                        <i class="fa fa-arrow-up fa-2x upvote-click" data-answer="{{answer.id}}"></i>
                     </span>
                 </div>
                 <div class="downvote mt-3">
                     <span class="text-danger">
-                        <i class="fa fa-arrow-down fa-2x"></i>
+                        <i class="fa fa-arrow-down fa-2x downvote-click" data-answer="{{answer.id}}"></i>
                     </span><br/>
-                    <strong>123</strong>
+                    <strong class="downvote-count-{{answer.id}}">{{answer.downvote_set.count}}</strong>
                 </div>
             </div>
             <div class="col-11">
@@ -82,12 +88,6 @@
                     <a href="#" class="mr-3">{{answer.user.username}}</a>
                     <span class="mr-3"><span class="comment-count-{{answer.id}}">{{answer.comment_set.count}}</span> comments</span>
                     <span>{{answer.add_time|date:'d/m/Y h:i:s'}}</span>
-                </p>
-                <p>
-                    tags:
-                    {% for tag in tags %}
-                    <a href="#" class="badge badge-secondary p-1">{{tag}}</a>
-                    {% endfor %}
                 </p>
                 <!-- Comment Section Start -->
                 <h3 class="my-4">Comment</h3>
@@ -172,6 +172,48 @@
                     $(".comment-count-"+_answerid).text(parseInt(prevCount)+1);
                     }
                     $(".save-comment").removeClass('disabled').text('Submit');
+                }
+            });
+        });
+
+        // Upvote
+        $(".upvote-click").on('click',function(){
+            var answerid=$(this).data('answer');
+            // Ajax
+            $.ajax({
+                url:"/save-upvote",
+                type:"post",
+                data:{
+                    answerid:answerid,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                dataType:'json',
+                success:function(res){
+                    var _prevupvote=$(".upvote-count-"+answerid).text();
+                    if(res.bool==true){
+                        $(".upvote-count-"+answerid).text(parseInt(_prevupvote)+1);
+                    }
+                }
+            });
+        });
+
+        // Downvote
+        $(".downvote-click").on('click',function(){
+            var answerid=$(this).data('answer');
+            // Ajax
+            $.ajax({
+                url:"/save-downvote",
+                type:"post",
+                data:{
+                    answerid:answerid,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                dataType:'json',
+                success:function(res){
+                    var _prevupvote=$(".downvote-count-"+answerid).text();
+                    if(res.bool==true){
+                        $(".downvote-count-"+answerid).text(parseInt(_prevupvote)+1);
+                    }
                 }
             });
         });
