@@ -27,11 +27,23 @@
                         <a class="nav-link" href="#">Tags</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ask</a>
+                        <a class="nav-link" href="/ask-question">Ask</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/accounts/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/accounts/register">Register</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

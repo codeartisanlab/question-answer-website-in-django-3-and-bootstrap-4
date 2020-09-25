@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from .models import Question,Answer,Comment,UpVote,DownVote
 from django.core.paginator import Paginator
 from django.contrib import messages
-from .forms import AnswerForm
+from .forms import AnswerForm,QuestionForm
+from django.contrib.auth.forms import UserCreationForm
 # Home Page
 def home(request):
     if 'q' in request.GET:
@@ -11,7 +12,7 @@ def home(request):
         quests=Question.objects.filter(title__icontains=q).order_by('-id')
     else:
         quests=Question.objects.all().order_by('-id')
-    paginator=Paginator(quests,1)
+    paginator=Paginator(quests,10)
     page_num=request.GET.get('page',1)
     quests=paginator.page(page_num)
     return render(request,'home.html',{'quests':quests})
@@ -82,5 +83,27 @@ def save_downvote(request):
                 user=user
             )
             return JsonResponse({'bool':True})
+
+# User Register
+def register(request):
+    form=UserCreationForm
+    if request.method=='POST':
+        regForm=UserCreationForm(request.POST)
+        if regForm.is_valid():
+            regForm.save()
+            messages.success(request,'User has been registered!!')
+    return render(request,'registration/register.html',{'form':form})
+
+# Ask Form
+def ask_form(request):
+    form=QuestionForm
+    if request.method=='POST':
+        questForm=QuestionForm(request.POST)
+        if questForm.is_valid():
+            questForm=questForm.save(commit=False)
+            questForm.user=request.user
+            questForm.save()
+            messages.success(request,'Question has been added.')
+    return render(request,'ask-question.html',{'form':form})
         
         

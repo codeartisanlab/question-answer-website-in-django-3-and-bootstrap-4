@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Ask Question{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card mt-5">
+        <h5 class="card-header">Ask Question</h5>
+        <div class="card-body">
+            {% for msg in messages %}
+            <p class="text-success">{{msg}}</p>
+            {% endfor %}
+            <form method="post">
+                {% csrf_token %}
+                <table class="table table-bordered">
+                    {{form.as_table}}
+                    <tr>
+                        <td colspan="2">
+                            <button class="btn btn-primary">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
