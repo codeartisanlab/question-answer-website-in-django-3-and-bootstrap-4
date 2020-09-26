@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}{{tag}}{% endblock %}
+{% block content %}
+    <!-- Question List -->
+    <div class="container py-5">
+        {% for quest in quests %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title"><a href="/detail/{{quest.id}}">{{quest.title}}</a></h4>
+                <p class="card-text">{{quest.detail}}</p>
+                <p>
+                    <a href="#" class="mr-2">{{quest.user.username}}</a>
+                    <a href="#" class="mr-2">{{quest.answer_set.count}} Answers</a>
+                    <a href="#" class="mr-2">{{quest.total_comments}} Comments</a>
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if quests.has_other_pages %}
+    <!-- Pagination -->
+    <nav class="my-3 container">
+        <ul class="pagination">
+            {% if quests.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{quests.previous_page_number}}">Previous</a></li>
+          {% endif %}
+          {% for i in quests.paginator.page_range %}
+          {% if quests.number == i %}
+          <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if quests.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{quests.next_page_number}}">Next</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+{% endblock %}

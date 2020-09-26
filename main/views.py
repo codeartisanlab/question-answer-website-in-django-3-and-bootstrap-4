@@ -5,13 +5,14 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from .forms import AnswerForm,QuestionForm
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Count
 # Home Page
 def home(request):
     if 'q' in request.GET:
         q=request.GET['q']
-        quests=Question.objects.filter(title__icontains=q).order_by('-id')
+        quests=Question.objects.annotate(total_comments=Count('answer__comment')).filter(title__icontains=q).order_by('-id')
     else:
-        quests=Question.objects.all().order_by('-id')
+        quests=Question.objects.annotate(total_comments=Count('answer__comment')).all().order_by('-id')
     paginator=Paginator(quests,10)
     page_num=request.GET.get('page',1)
     quests=paginator.page(page_num)
@@ -105,5 +106,14 @@ def ask_form(request):
             questForm.save()
             messages.success(request,'Question has been added.')
     return render(request,'ask-question.html',{'form':form})
+
+
+# Questions according to tag
+def tag(request,tag):
+    quests=Question.objects.annotate(total_comments=Count('answer__comment')).filter(tags__icontains=tag).order_by('-id')
+    paginator=Paginator(quests,10)
+    page_num=request.GET.get('page',1)
+    quests=paginator.page(page_num)
+    return render(request,'tag.html',{'quests':quests,'tag':tag})
         
         

@@ -10,7 +10,7 @@
         <p>
             tags:
             {% for tag in tags %}
-            <a href="#" class="badge badge-secondary p-1">{{tag}}</a>
+            <a href="/tag/{{tag|slugify}}" class="badge badge-secondary p-1">{{tag}}</a>
             {% endfor %}
         </p>
         <p>

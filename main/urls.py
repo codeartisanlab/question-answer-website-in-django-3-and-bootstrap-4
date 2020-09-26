@@ -10,4 +10,6 @@ urlpatterns=[
     path('accounts/register/',views.register,name='register'),
     # Ask QUestion
     path('ask-question',views.ask_form,name='ask-question'),
+    # Ask QUestion
+    path('tag/<str:tag>',views.tag,name='tag'),
 ]
