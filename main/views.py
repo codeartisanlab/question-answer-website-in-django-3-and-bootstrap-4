@@ -118,12 +118,20 @@ def tag(request,tag):
 
 # Profile
 def profile(request):
+    quests=Question.objects.filter(user=request.user).order_by('-id')
+    answers=Answer.objects.filter(user=request.user).order_by('-id')
+    comments=Comment.objects.filter(user=request.user).order_by('-id')
     if request.method=='POST':
         profileForm=ProfileForm(request.POST,instance=request.user)
         if profileForm.is_valid():
             profileForm.save()
             messages.success(request,'Profile has been updated.')
     form=ProfileForm(instance=request.user)
-    return render(request,'registration/profile.html',{'form':form})
+    return render(request,'registration/profile.html',{
+        'form':form,
+        'quests':quests,
+        'answers':answers,
+        'comments':comments
+    })
         
         

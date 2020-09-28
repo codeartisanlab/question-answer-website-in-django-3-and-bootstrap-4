@@ -1,24 +1,80 @@
 {% extends 'base.html' %}
 {% block title %}Edit Profile{% endblock %}
 {% block content %}
-<div class="container">
-    <div class="card mt-5">
-        <h5 class="card-header">Edit Profile</h5>
-        <div class="card-body">
-            {% for msg in messages %}
-            <p class="text-success">{{msg}}</p>
-            {% endfor %}
-            <form method="post">
-                {% csrf_token %}
-                <table class="table table-bordered">
-                    {{form.as_table}}
-                    <tr>
-                        <td colspan="2">
-                            <button class="btn btn-primary">Submit</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-home" aria-selected="true">Profile</a>
+                <a class="nav-link" id="v-pills-questions-tab" data-toggle="pill" href="#v-pills-questions" role="tab" aria-controls="v-pills-questions" aria-selected="false">Questions</a>
+                <a class="nav-link" id="v-pills-answers-tab" data-toggle="pill" href="#v-pills-answers" role="tab" aria-controls="v-pills-answers" aria-selected="false">Answers</a>
+                <a class="nav-link" id="v-pills-comments-tab" data-toggle="pill" href="#v-pills-comments" role="tab" aria-controls="v-pills-comments" aria-selected="false">Comments</a>
+                <a class="nav-link" id="v-pills-upvotes-tab" data-toggle="pill" href="#v-pills-upvotes" role="tab" aria-controls="v-pills-upvotes" aria-selected="false">UpVotes</a>
+                <a class="nav-link" id="v-pills-downvotes-tab" data-toggle="pill" href="#v-pills-downvotes" role="tab" aria-controls="v-pills-downvotes" aria-selected="false">DownVotes</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                <!-- Profile -->
+                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <div class="card">
+                        <h5 class="card-header">Edit Profile</h5>
+                        <div class="card-body">
+                            {% for msg in messages %}
+                            <p class="text-success">{{msg}}</p>
+                            {% endfor %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <table class="table table-bordered">
+                                    {{form.as_table}}
+                                    <tr>
+                                        <td colspan="2">
+                                            <button class="btn btn-primary">Submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Questions -->
+                <div class="tab-pane fade" id="v-pills-questions" role="tabpanel" aria-labelledby="v-pills-questions-tab">
+                    <div class="card">
+                        <h5 class="card-header">My Questions <span class="badge badge-info">{{quests.count}}</span></h5>
+                        <div class="card-body">
+                            {% for quest in quests %}
+                            <p><a href="/detail/{{quest.id}}">{{quest.title}}</a></p>
+                            <hr />
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!-- Answers -->
+                <div class="tab-pane fade" id="v-pills-answers" role="tabpanel" aria-labelledby="v-pills-answers-tab">
+                    <div class="card">
+                        <h5 class="card-header">My Answers <span class="badge badge-info">{{answers.count}}</span></h5>
+                        <div class="card-body">
+                            {% for ans in answers %}
+                            <p><a href="/detail/{{ans.question.id}}">{{ans.question.title}}</a></p>
+                            <hr />
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-comments" role="tabpanel" aria-labelledby="v-pills-comments-tab">
+                    <div class="card">
+                        <h5 class="card-header">My Comments <span class="badge badge-info">{{comments.count}}</span></h5>
+                        <div class="card-body">
+                            {% for comment in comments %}
+                            <p><a href="/detail/{{ans.question.id}}">{{comment.answer.question.title}}</a></p>
+                            <hr />
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-upvotes" role="tabpanel" aria-labelledby="v-pills-upvotes-tab">UpVotes</div>
+                <div class="tab-pane fade" id="v-pills-downvotes" role="tabpanel" aria-labelledby="v-pills-downvotes-tab">DownVotes</div>
+            </div>
         </div>
     </div>
 </div>
