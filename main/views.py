@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from .models import Question,Answer,Comment,UpVote,DownVote
 from django.core.paginator import Paginator
 from django.contrib import messages
-from .forms import AnswerForm,QuestionForm
+from .forms import AnswerForm,QuestionForm,ProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Count
 # Home Page
@@ -115,5 +115,15 @@ def tag(request,tag):
     page_num=request.GET.get('page',1)
     quests=paginator.page(page_num)
     return render(request,'tag.html',{'quests':quests,'tag':tag})
+
+# Profile
+def profile(request):
+    if request.method=='POST':
+        profileForm=ProfileForm(request.POST,instance=request.user)
+        if profileForm.is_valid():
+            profileForm.save()
+            messages.success(request,'Profile has been updated.')
+    form=ProfileForm(instance=request.user)
+    return render(request,'registration/profile.html',{'form':form})
         
         

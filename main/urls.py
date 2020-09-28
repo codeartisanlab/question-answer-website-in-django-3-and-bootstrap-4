@@ -8,6 +8,8 @@ urlpatterns=[
     path('save-downvote',views.save_downvote,name='save-downvote'),
     # User Register
     path('accounts/register/',views.register,name='register'),
+    # Profile
+    path('accounts/profile/',views.profile,name='profile'),
     # Ask QUestion
     path('ask-question',views.ask_form,name='ask-question'),
     # Ask QUestion
