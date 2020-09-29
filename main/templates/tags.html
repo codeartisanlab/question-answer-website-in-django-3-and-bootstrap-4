@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}All Tags{% endblock %}
+{% block content %}
+    <!-- Question List -->
+    <div class="container py-5">
+        <div class="row">
+            {% for tag in tags %}
+            <div class="col-2">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text"><a href="/tag/{{tag.name|slugify}}">{{tag.name}} 
+                            <span class="badge badge-info">{{tag.count}}</span></a></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

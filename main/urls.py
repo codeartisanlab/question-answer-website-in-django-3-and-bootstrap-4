@@ -12,6 +12,8 @@ urlpatterns=[
     path('accounts/profile/',views.profile,name='profile'),
     # Ask QUestion
     path('ask-question',views.ask_form,name='ask-question'),
-    # Ask QUestion
+    # Tag Page
     path('tag/<str:tag>',views.tag,name='tag'),
+    # Tags Page
+    path('tags',views.tags,name='tags'),
 ]

@@ -54,10 +54,18 @@
                     <div class="card">
                         <h5 class="card-header">My Answers <span class="badge badge-info">{{answers.count}}</span></h5>
                         <div class="card-body">
-                            {% for ans in answers %}
-                            <p><a href="/detail/{{ans.question.id}}">{{ans.question.title}}</a></p>
-                            <hr />
-                            {% endfor %}
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Question</th>
+                                    <th>Answer</th>
+                                </tr>
+                                {% for ans in answers %}
+                                <tr>
+                                    <td><a href="/detail/{{ans.question.id}}">{{ans.question.title}}</a></td>
+                                    <td><a href="/detail/{{ans.question.id}}">{{ans.detail}}</a></td>
+                                </tr>
+                                {% endfor %}
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -65,15 +73,61 @@
                     <div class="card">
                         <h5 class="card-header">My Comments <span class="badge badge-info">{{comments.count}}</span></h5>
                         <div class="card-body">
-                            {% for comment in comments %}
-                            <p><a href="/detail/{{ans.question.id}}">{{comment.answer.question.title}}</a></p>
-                            <hr />
-                            {% endfor %}
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Question</th>
+                                    <th>Answer</th>
+                                    <th>Comment</th>
+                                </tr>
+                                {% for comment in comments %}
+                                <tr>
+                                    <td><a href="/detail/{{comment.answer.question.id}}">{{comment.answer.question.title}}</a></td>
+                                    <td><a href="/detail/{{comment.answer.questionans.question.id}}">{{comment.answer.detail}}</a></td>
+                                    <td><a href="/detail/{{comment.answer.question.id}}">{{comment.comment}}</a></td>
+                                </tr>
+                                {% endfor %}
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="v-pills-upvotes" role="tabpanel" aria-labelledby="v-pills-upvotes-tab">UpVotes</div>
-                <div class="tab-pane fade" id="v-pills-downvotes" role="tabpanel" aria-labelledby="v-pills-downvotes-tab">DownVotes</div>
+                <div class="tab-pane fade" id="v-pills-upvotes" role="tabpanel" aria-labelledby="v-pills-upvotes-tab">
+                    <div class="card">
+                        <h5 class="card-header">My Comments <span class="badge badge-info">{{upvotes.count}}</span></h5>
+                        <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Question</th>
+                            <th>Answer</th>
+                        </tr>
+                        {% for upvote in upvotes %}
+                        <tr>
+                            <td><a href="/detail/{{upvote.answer.question.id}}">{{upvote.answer.question.title}}</a></td>
+                            <td><a href="/detail/{{upvote.answer.question.id}}">{{upvote.answer.detail}}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-downvotes" role="tabpanel" aria-labelledby="v-pills-downvotes-tab">
+                    <div class="card">
+                        <h5 class="card-header">My Comments <span class="badge badge-info">{{downvotes.count}}</span></h5>
+                        <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Question</th>
+                            <th>Answer</th>
+                        </tr>
+                        {% for downvote in downvotes %}
+                        <tr>
+                            <td><a href="/detail/{{downvote.answer.question.id}}">{{downvote.answer.question.title}}</a></td>
+                            <td><a href="/detail/{{downvote.answer.question.id}}">{{downvote.answer.detail}}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

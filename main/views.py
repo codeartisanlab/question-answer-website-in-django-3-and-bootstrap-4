@@ -121,6 +121,8 @@ def profile(request):
     quests=Question.objects.filter(user=request.user).order_by('-id')
     answers=Answer.objects.filter(user=request.user).order_by('-id')
     comments=Comment.objects.filter(user=request.user).order_by('-id')
+    upvotes=UpVote.objects.filter(user=request.user).order_by('-id')
+    downvotes=DownVote.objects.filter(user=request.user).order_by('-id')
     if request.method=='POST':
         profileForm=ProfileForm(request.POST,instance=request.user)
         if profileForm.is_valid():
@@ -131,7 +133,28 @@ def profile(request):
         'form':form,
         'quests':quests,
         'answers':answers,
-        'comments':comments
+        'comments':comments,
+        'upvotes':upvotes,
+        'downvotes':downvotes,
     })
+
+# Tags Page
+def tags(request):
+    quests=Question.objects.all()
+    tags=[]
+    for quest in quests:
+        qtags=[tag.strip() for tag in quest.tags.split(',')]
+        for tag in qtags:
+            if tag not in tags:
+                tags.append(tag)
+    # Fetch Questions
+    tag_with_count=[]
+    for tag in tags:
+        tag_data={
+            'name':tag,
+            'count':Question.objects.filter(tags__icontains=tag).count()
+        }
+        tag_with_count.append(tag_data)
+    return render(request,'tags.html',{'tags':tag_with_count})
         
         
